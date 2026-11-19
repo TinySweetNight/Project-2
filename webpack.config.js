@@ -4,6 +4,7 @@ module.exports = {
     entry: {
         app: './client/makeTweet.jsx',
         login: './client/login.jsx',
+        account: './client/account.jsx',
     },
     module: {
         rules : [

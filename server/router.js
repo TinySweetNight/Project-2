@@ -11,12 +11,17 @@ const router = (app) =>{
 
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
+    app.get('/account',mid.requiresLogin, controllers.Account.accountPage);
+    app.post('/changePass',mid.requiresLogin, controllers.Account.passwordChange);
+
     app.get('/makeTweet',mid.requiresLogin, controllers.Tweet.makeTweetPage);
     app.post('/makeTweet',mid.requiresLogin, controllers.Tweet.makeTweet);
 
     app.post('/deleteTweet',mid.requiresLogin, controllers.Tweet.deleteTweet);
 
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+    app.get('/*wild', controllers.NotFound.notFound);
 
 };
 

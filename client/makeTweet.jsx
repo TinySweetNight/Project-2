@@ -44,7 +44,8 @@ const TweetForm = (props) => {
                 <label htmlFor="location">Location:</label>
                 <input id="tweetLocation" type="text" name="location" placeholder= "Spotted Location"/>
                 <label htmlFor="message">Message:</label>
-                <input id="tweetMessage" type="text" name="Message" placeholder= "Notes"/>
+                <input id="tweetMessage" type="text" name="message" placeholder= "Notes"/>
+                <br />
                 <input className="makeTweetSubmit" type="submit" value="Make Tweet"/>
             </form>
     )
@@ -57,7 +58,7 @@ const TweetList = (props) => {
 
     useEffect(() => {
         const loadTweetsFromServer = async () => {
-            const response = await fetch('/makeTweet');
+            const response = await fetch('/getTweets');
             const data = await response.json();
             setTweets(data.tweets);
         }
