@@ -67,8 +67,8 @@ const signup = async (req, res) => {
 //Change the password of the logged in account.
 const passwordChange = async (req, res) => {
     const pass = `${req.body.pass}`;
-    const newPass = `${req.body.passNew}`;
-    const newPass2 = `${req.body.passNew2}`;
+    const newPass = `${req.body.newPass}`;
+    const newPass2 = `${req.body.newPass2}`;
 
     if (!pass || !newPass || !newPass2) {
         return res.status(400).json({ error: 'All fields are required!' });
@@ -87,9 +87,6 @@ const passwordChange = async (req, res) => {
         //Update Password to the database and log the account out
 
         user.password = hash;
-
-        console.log(user.password);
-        console.log(hash);
 
         await user.save();
         
