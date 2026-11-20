@@ -42,6 +42,7 @@ const getTweets = async (req, res) => {
     }
 };
 
+
 const deleteTweet = async (req, res) => {
     try{
         await Tweet.deleteOne({_id: req.body.id, owner:req.session.account._id}).exec();
