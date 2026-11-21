@@ -80,8 +80,6 @@ const passwordChange = async (req, res) => {
 
     try {
         const hash = await Account.generateHash(newPass);
-        //Need user log in
-       // const query = { owner: req.session.account._id };
 
         const user = await Account.findById(req.session.account._id);
         //Update Password to the database and log the account out
@@ -97,7 +95,39 @@ const passwordChange = async (req, res) => {
         return res.status(500).json({ error: 'An error Occured!' });
     }
 
+}
 
+//Make update to Premium 
+const changePremium = async (req, res) => {
+    const value = `${req.body.value}`;
+
+    try{
+        const user = await Account.findById(req.session.account._id);
+
+        user.isPremium = value;
+
+        await user.save();
+
+        return res.status(200).json({message: 'Updated!'});
+    } catch (err){
+        console.log(err);
+        return res.status(500).json({ error: 'An Error Occured!'});
+    }
+}
+
+//get Premium
+const getPremium = async (req, res) => {
+     try {
+        const user = await Account.findById(req.session.account._id);
+        let doc = user.isPremium;
+
+        doc = JSON.stringify(doc);
+
+        return res.json({premium: doc});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Error retrieving premium!' });
+    }
 }
 
 module.exports = {
@@ -107,4 +137,6 @@ module.exports = {
     signup,
     accountPage,
     passwordChange,
+    changePremium,
+    getPremium,
 };

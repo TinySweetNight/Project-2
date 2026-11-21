@@ -48,14 +48,15 @@ const AccountWindow = (props) => {
 };
 
 //Update the Premium by sending to POST.
-const handlePremium = (e) => {
+const handlePremium = (e, onPremiumChange) => {
     e.preventDefault();
     helper.hideError();
 
     const value = e.target.querySelector('input[name="premium"]:checked').value;
 
-    helper.sendPost(e.target.action, { value });
+    helper.sendPost(e.target.action, { value }, onPremiumChange);
 
+    return false;
 }
 
 
@@ -72,7 +73,7 @@ const PremiumWindow = (props) => {
     return (
         <form id="premiumForm"
             name="premiumForm"
-            onSubmit={handlePremium}
+            onSubmit={(e) => {handlePremium(e, props.triggerReload)}}
             action="/changePremium"
             method="POST"
             className="mainForm"
@@ -105,12 +106,35 @@ const PremiumWindow = (props) => {
 
 }
 
+//Display premium!
+const GotPremium = (props) => {
+     const [premium, setPremium] = useState(props.premium);
+
+    useEffect(() => {
+        const loadPremium = async () => {
+            const response = await fetch('/getPremium');
+            const data = await response.json();
+            setPremium(data.premium);
+        }
+        loadPremium();
+    }, [props.reloadPage]);
+
+    return (
+        <div>
+            <h2>Your Premium is: {premium}</h2>
+        </div>
+    )
+}
+
+//Set up an app for our react components
 const App = () => {
-    
+     const [reloadPage, setReloadPage] = useState(false);
+
     return (
         <div>
             <div>
-                <PremiumWindow />
+                <GotPremium reloadPage={reloadPage} triggerReload={() => setReloadPage(!reloadPage)}/>
+                <PremiumWindow  triggerReload={() => setReloadPage(!reloadPage)}/>
             </div>
             <div>
                 <AccountWindow />
