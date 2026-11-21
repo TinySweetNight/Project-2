@@ -1,6 +1,7 @@
 const helper = require('./helper.js');
 const React = require('react');
-const {createRoot} = require('react-dom/client');
+const { createRoot } = require('react-dom/client');
+const { useState, useEffect } = React;
 
 const handlePassword = (e) => {
     e.preventDefault();
@@ -10,7 +11,7 @@ const handlePassword = (e) => {
     const newPass = e.target.querySelector('#newPass').value;
     const newPass2 = e.target.querySelector('#newPass2').value;
 
-    if ( !pass || !newPass|| !newPass2) {
+    if (!pass || !newPass || !newPass2) {
         helper.handleError('All fields are required!');
         return false;
     }
@@ -20,7 +21,7 @@ const handlePassword = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {pass, newPass, newPass2 });
+    helper.sendPost(e.target.action, { pass, newPass, newPass2 });
 
     return false;
 }
@@ -46,11 +47,84 @@ const AccountWindow = (props) => {
     );
 };
 
+//Update the Premium by sending to POST.
+const handlePremium = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const value = e.target.querySelector('input[name="premium"]:checked').value;
+
+    helper.sendPost(e.target.action, { value });
+
+}
+
+
+//Get radio button for unlocking Premium, this should be a pop-up with a paywall but for sake 
+// Of demostration, it's this.
+const PremiumWindow = (props) => {
+
+    const [checked, setChecked] = useState(true);
+
+    const switchChecked = (e) => {
+        setChecked(e.target.checked);
+    }
+
+    return (
+        <form id="premiumForm"
+            name="premiumForm"
+            onSubmit={handlePremium}
+            action="/changePremium"
+            method="POST"
+            className="mainForm"
+        >
+            <h2>Premium!</h2>
+            <p>Pay $1 a month to unlock new features for your birds</p>
+            <label>
+                <input
+                    type="radio"
+                    name="premium"
+                    value="false"
+                    id="false"
+                    onChange={switchChecked}
+                    checked = {checked}
+                /> No
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="premium"
+                    value="true"
+                    id="true"
+                    onChange={switchChecked}
+                    checked = {checked}
+                /> Yes
+            </label>
+            <input className="formSubmit" type="submit" value="Sign up for Premium!" id="submit"/>
+        </form>
+    );
+
+}
+
+const App = () => {
+    
+    return (
+        <div>
+            <div>
+                <PremiumWindow />
+            </div>
+            <div>
+                <AccountWindow />
+            </div>
+        </div>
+    );
+}
+
 
 const init = () => {
     const root = createRoot(document.getElementById('account'));
     
-    root.render(<AccountWindow/>);
+
+    root.render(<App />);
 };
 
 window.onload = init;
