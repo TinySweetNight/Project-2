@@ -3,6 +3,7 @@ const React = require('react');
 const { createRoot } = require('react-dom/client');
 const { useState, useEffect } = React;
 
+//Handle changing the password 
 const handlePassword = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -144,6 +145,7 @@ const App = () => {
 }
 
 
+//Init to display everything to screen
 const init = () => {
     const root = createRoot(document.getElementById('account'));
     

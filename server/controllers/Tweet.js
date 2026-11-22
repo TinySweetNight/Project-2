@@ -1,5 +1,6 @@
 const models = require('../models');
 const Tweet = models.Tweet;
+const Account = models.Account;
 
 const makeTweetPage = async (req, res) => {
     return res.render('app');
@@ -14,13 +15,17 @@ const makeTweet = async (req, res) => {
         species: req.body.species,
         location: req.body.location,
         message: req.body.message,
+        color: req.body.color,
         owner: req.session.account._id,
     };
 
     try {
         const newTweet = new Tweet(tweetData);
         await newTweet.save();
-        return res.status(201).json({species: newTweet.species, location: newTweet.location, message: newTweet.message});
+        return res.status(201).json({species: newTweet.species, 
+            location: newTweet.location, 
+            message: newTweet.message, 
+            color: newTweet.color});
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
@@ -30,12 +35,17 @@ const makeTweet = async (req, res) => {
     }
 };
 
+//Have something to get User Premium with so we can send it in for our hidden information
 const getTweets = async (req, res) => {
     try {
         const query = { owner: req.session.account._id };
-        const docs = await Tweet.find(query).select('species location message').lean().exec();
+        const user = await Account.findById(req.session.account._id);
 
-        return res.json({ tweets: docs });
+        const premium = user.isPremium;
+
+        const docs = await Tweet.find(query).select('species location message color').lean().exec();
+
+        return res.json({ tweets: docs, isPremium: premium});
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'Error retrieving tweets!' });

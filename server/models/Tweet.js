@@ -7,6 +7,8 @@ const setLocation = (location) => _.escape(location).trim();
 
 const setMessage = (message) => _.escape(message).trim();
 
+const setColor = (color) => _.escape(color).trim();
+
 const TweetSchema = new mongoose.Schema({
     message: {
         type: String,
@@ -26,6 +28,11 @@ const TweetSchema = new mongoose.Schema({
         trim: true,
         set: setLocation,
     },
+    color: {
+        type: String,
+        trim: true,
+        set: setColor,
+    },
     owner: {
         type: mongoose.Schema.ObjectId,
         required: true,
@@ -41,6 +48,7 @@ TweetSchema.statics.toAPI = (doc) => ({
     message: doc.message,
     species: doc.species,
     location: doc.location,
+    color: doc.color,
 });
 
 const TweetModel = mongoose.model('Tweet', TweetSchema);
