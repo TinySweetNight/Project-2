@@ -53,6 +53,7 @@ const handlePremium = (e, onPremiumChange) => {
     e.preventDefault();
     helper.hideError();
 
+    // used https://stackoverflow.com/questions/15839169/how-to-get-the-value-of-a-selected-radio-button
     const value = e.target.querySelector('input[name="premium"]:checked').value;
 
     helper.sendPost(e.target.action, { value }, onPremiumChange);
@@ -71,6 +72,7 @@ const PremiumWindow = (props) => {
         setChecked(e.target.checked);
     }
 
+    // The radio buttons were based on the React Radio code from https://www.w3schools.com/react/react_forms_radio.asp
     return (
         <form id="premiumForm"
             name="premiumForm"
