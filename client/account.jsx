@@ -149,7 +149,6 @@ const App = () => {
 const init = () => {
     const root = createRoot(document.getElementById('account'));
     
-
     root.render(<App />);
 };
 

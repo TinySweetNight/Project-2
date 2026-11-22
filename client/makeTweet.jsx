@@ -3,7 +3,8 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 
-const handleTweet = (e, onTweetAdded) => {
+//Have to make Premium or else color will get mad at me.
+const handleTweetPremium = (e, onTweetAdded) => {
     e.preventDefault();
     helper.hideError();
 
@@ -12,7 +13,8 @@ const handleTweet = (e, onTweetAdded) => {
     const location = e.target.querySelector('#tweetLocation').value;
     const color = e.target.querySelector('#tweetColor').value;
 
-    if (!species || !location || !message) {
+
+    if (!species || !location || !message || !color) {
         helper.handleError('Species, Location, and Message are required');
         return false;
     }
@@ -20,6 +22,25 @@ const handleTweet = (e, onTweetAdded) => {
     helper.sendPost(e.target.action, { location, species, message, color }, onTweetAdded);
     return false;
 }
+
+const handleTweet = (e, onTweetAdded) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const species = e.target.querySelector('#tweetSpecies').value;
+    const message = e.target.querySelector('#tweetNote').value;
+    const location = e.target.querySelector('#tweetLocation').value;
+
+
+    if (!species || !location || !message) {
+        helper.handleError('Species, Location, and Message are required');
+        return false;
+    }
+
+    helper.sendPost(e.target.action, { location, species, message }, onTweetAdded);
+    return false;
+}
+
 
 const deleteTweet = async (id, onTweetDeleted) => {
     await fetch('/deleteTweet', {
@@ -49,7 +70,7 @@ const TweetForm = (props) => {
     if (premium) {
         return (
             <form id="tweetForm"
-                onSubmit={(e) => handleTweet(e, props.triggerReload)}
+                onSubmit={(e) => handleTweetPremium(e, props.triggerReload)}
                 name="tweetForm"
                 action="/makeTweet"
                 method="POST"
